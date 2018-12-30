@@ -1,10 +1,13 @@
-$(function(){
+$(() =>
+{
 
-    $.get( "clubs", function( clubs ) {
-
-        clubs.array.forEach(element => {
-            $('#club').append( new Option(element) );
-        });
+    $.get( "clubs", ( clubs ) =>
+    {
+        let datalist = $('#club');
+        for (club of clubs) 
+        {
+            datalist.append(new Option(club));
+        }
     });
     
 });
