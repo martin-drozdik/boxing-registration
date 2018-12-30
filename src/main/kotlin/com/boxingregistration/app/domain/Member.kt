@@ -1,7 +1,7 @@
 package com.boxingregistration.app.domain
 
-import org.springframework.data.annotation.Id
 import javax.persistence.Entity
+import javax.persistence.Id
 
 @Entity
 data class Member
