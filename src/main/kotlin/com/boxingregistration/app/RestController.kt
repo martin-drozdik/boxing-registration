@@ -2,6 +2,7 @@ package com.boxingregistration.app
 
 import com.boxingregistration.app.domain.Member
 import com.boxingregistration.app.domain.YearCategory
+import com.boxingregistration.app.domain.getAllClubs
 import com.boxingregistration.app.domain.getAllYearCategories
 import com.boxingregistration.app.persistence.MemberRepository
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,6 +17,12 @@ class MemberController(val repository: MemberRepository)
     fun categories(): List<YearCategory>
     {
         return getAllYearCategories()
+    }
+
+    @GetMapping("/clubs")
+    fun clubs(): List<String>
+    {
+        return getAllClubs()
     }
 
     @GetMapping("/members")
