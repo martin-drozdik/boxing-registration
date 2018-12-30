@@ -6,7 +6,8 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class AppApplication
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>)
+{
 	runApplication<AppApplication>(*args)
 }
 
