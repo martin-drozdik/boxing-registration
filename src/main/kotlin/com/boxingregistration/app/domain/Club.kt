@@ -31,7 +31,7 @@ fun getAllClubs(): List<String>
         "Box Club Guerrero Nitra",
         "Unique Fight Club Nitra",
         "Športový Klub Boxu - Michal Franek",
-        "1.Bratislavská boxerňa",
+        "1. Bratislavská boxerňa",
         "Boxing Club Veľké Úľany",
         "Boxing Club Veľké Leváre",
         "Boxing Club Veľké Kozmálovce",

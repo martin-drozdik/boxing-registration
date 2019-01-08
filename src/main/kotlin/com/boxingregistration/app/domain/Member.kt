@@ -7,8 +7,9 @@ import javax.persistence.Id
 data class Member
 (
     @Id val name: String,
-    val coach: String,
     val club: String,
     val category: String,
-    val nMatches: Int
+    val n_fights: Int,
+    val year: Int,
+    val coach: String = ""
 )

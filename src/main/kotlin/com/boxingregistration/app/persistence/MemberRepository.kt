@@ -6,3 +6,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MemberRepository: JpaRepository<Member, String>
+{
+    fun findByClub(club: String): List<Member>
+
+    fun deleteByClub(club: String): Long
+}

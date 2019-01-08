@@ -5,10 +5,10 @@ import com.boxingregistration.app.domain.YearCategory
 import com.boxingregistration.app.domain.getAllClubs
 import com.boxingregistration.app.domain.getAllYearCategories
 import com.boxingregistration.app.persistence.MemberRepository
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
+
+class UpdateClubCommand(val club: String, val members: List<Member>)
 
 @RestController
 class MemberController(val repository: MemberRepository)
@@ -31,9 +31,19 @@ class MemberController(val repository: MemberRepository)
         return repository.findAll()
     }
 
-    @PostMapping("/members")
-    fun update(@RequestBody newMembers: List<Member>): List<Member>
+
+    @GetMapping("/club/{club}")
+    fun club(@PathVariable club: String): List<Member>
     {
-        return repository.saveAll(newMembers)
+        return repository.findByClub(club)
+    }
+
+
+    @Transactional
+    @PostMapping("/members/update")
+    fun update(@RequestBody updateCommand: UpdateClubCommand)
+    {
+        repository.deleteByClub(updateCommand.club)
+        repository.saveAll(updateCommand.members)
     }
 }

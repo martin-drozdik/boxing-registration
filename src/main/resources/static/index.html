@@ -1,4 +1,4 @@
-<!DOCTYPE <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -7,14 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
     <script src="main.js"></script>
 </head>
 <body>
-    <div id="header">Registrácia</div>
+<div id="header">Registrácia</div>
+
+<div id="boxerlist">
     <form>
-        <label for="club">Vyberte boxersky klub</label>
-        <input list="club" id="club-choice" />
-        <datalist id="club"></datalist>
+        <label for="allclubs">Vyberte boxersky klub</label>
+        <select id="allclubs" v-model="club"></select>
     </form>
+
+    <form id="boxerlist">
+        <span>ročník</span>
+        <span>hmotnostná kategória</span>
+        <span>počet zápasov</span>
+        <span>meno a priezvisko</span>
+        <div v-for="(boxer, index) in members">
+            <input v-model="boxer.year" type="number" step="1">
+            <input v-model="boxer.category">
+            <input v-model="boxer.n_fights" type="number" step="1">
+            <input v-model="boxer.name">    
+            <button type="button" @click="kick_boxer($event, index)">x</button>
+            <button type="button" @click="add_boxer($event, index)">+</button>
+        </div>
+    </form>
+    <button @click="send_to_server">Send</button>
+</div>
+
+<script src="vues.js"></script>
 </body>
 </html>
