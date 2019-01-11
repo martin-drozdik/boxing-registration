@@ -1,11 +1,11 @@
-function make_empty_boxer(club) {
-
-    console.log(typeof club);
+function make_empty_boxer(club) 
+{
     return { year: '', category: '', n_fights: '', name: '', club: club };
 }
 
 new Vue({
     el: '#boxerlist',
+
     data: 
     {
         members: [make_empty_boxer(this.club)],
@@ -16,15 +16,16 @@ new Vue({
     {
         club: function(newClub) 
         {
-            let url = `/club/${this.club}`;
+            let url = `/club/${newClub}`;
             $.get(url, (data) => { 
                 if (data.length == 0)
                 {
-                    console.log(typeof newClub);
                     this.members = [make_empty_boxer(newClub)];
                 }
                 else
+                {
                     this.members = data;
+                }
             });
         }
     },
@@ -33,7 +34,6 @@ new Vue({
     {
         send_to_server: function() 
         {
-            console.log(typeof this.members[0].club)
             $.post({ 
                 url: "/members/update",
                 data : JSON.stringify({ club: this.club, members: this.members }),
@@ -50,7 +50,9 @@ new Vue({
         {
             this.members.splice(index, 1);
             if (this.members.length == 0)
+            {
                 this.members = [make_empty_boxer(this.club)];
+            }
         }
     }
 });
