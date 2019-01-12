@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
-    <script src="main.js"></script>
 </head>
 <body>
 <div id="header">Registrácia</div>
@@ -16,20 +15,32 @@
 <div id="boxerlist">
     <form>
         <label for="allclubs">Vyberte boxersky klub</label>
-        <select id="allclubs" v-model="club"></select>
+        <select id="allclubs" v-model="club">
+            <option v-for="club in all_clubs" v-bind:value="club">
+                    {{ club }}
+            </option>   
+        </select>
     </form>
 
-    <form id="boxerlist">
+    <form>
         <span>ročník</span>
         <span>hmotnostná kategória</span>
         <span>počet zápasov</span>
         <span>meno a priezvisko</span>
         <div v-for="(boxer, index) in members">
-            <input v-model="boxer.year" type="number" step="1">
-            <input v-model="boxer.category">
-            <input v-model="boxer.n_fights" type="number" step="1">
+            <select v-model="boxer.year_category">
+                <option v-for="year_category in all_year_categories" v-bind:value="year_category">
+                    {{ year_category }}
+                </option>
+            </select>
+            <select v-model="boxer.weight_category">
+                <option v-for="weight_category in get_possible_weight_categories(boxer.year_category)" v-bind:value="weight_category">
+                    {{ weight_category }}
+                </option>
+            </select>
+            <input v-model="boxer.n_fights" type="number" step="1" min="0" max="5000">
             <input v-model="boxer.name">    
-            <button type="button" @click="kick_boxer($event, index)">x</button>
+            <button type="button" @click="remove_boxer($event, index)">x</button>
             <button type="button" @click="add_boxer($event, index)">+</button>
         </div>
     </form>

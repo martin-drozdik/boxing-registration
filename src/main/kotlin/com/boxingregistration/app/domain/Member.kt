@@ -9,9 +9,9 @@ data class Member
 (
     val name: String,
     val club: String,
-    val category: String,
+    val weight_category: String,
+    val year_category: String,
     val n_fights: Int,
-    val year: Int,
     val coach: String = "",
     @Id val id: String = UUID.randomUUID().toString()
 )
