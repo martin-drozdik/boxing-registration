@@ -1,0 +1,2 @@
+http-server Projects/boxing-registration/src/main/resources/static -p 8081 -P http://localhost:8080
+

@@ -4,49 +4,82 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
 </head>
 <body>
-<div id="header">Registrácia</div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="nav-link" href="#">Registrácia</a>
+        <a class="nav-link" href="#">Všetci boxeri</a>
+    </nav>
 
-<div id="boxerlist">
+<div id="boxerlist" class="form-group">
     <form>
-        <label for="allclubs">Vyberte boxersky klub</label>
-        <select id="allclubs" v-model="club">
+        <select id="allclubs" v-model="club" class="custom-select mt-2 mb-4">
+            <option value="" disabled selected>Vyberte Boxerský Klub</option>
             <option v-for="club in all_clubs" v-bind:value="club">
-                    {{ club }}
+                {{ club }}
             </option>   
         </select>
     </form>
 
     <form>
-        <span>ročník</span>
-        <span>hmotnostná kategória</span>
-        <span>počet zápasov</span>
-        <span>meno a priezvisko</span>
+        <div>
+            <div class="form-row">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-block btn-dark font-weight-bold">Ročník</button>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-block btn-dark font-weight-bold">Kategória</button>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-block btn-dark font-weight-bold">Počet zápasov</button>
+                </div>
+
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-block btn-dark font-weight-bold">Meno a Priezvisko</button>
+                </div>
+            </div>
+        </div>
         <div v-for="(boxer, index) in members">
-            <select v-model="boxer.year_category">
-                <option v-for="year_category in all_year_categories" v-bind:value="year_category">
-                    {{ year_category }}
-                </option>
-            </select>
-            <select v-model="boxer.weight_category">
-                <option v-for="weight_category in get_possible_weight_categories(boxer.year_category)" v-bind:value="weight_category">
-                    {{ weight_category }}
-                </option>
-            </select>
-            <input v-model="boxer.n_fights" type="number" step="1" min="0" max="5000">
-            <input v-model="boxer.name">    
-            <button type="button" @click="remove_boxer($event, index)">x</button>
-            <button type="button" @click="add_boxer($event, index)">+</button>
+            <div class="form-row">
+                <div class="col-md-2">
+                    <select v-model="boxer.year_category" class="form-control mt-1">
+                        <option v-for="year_category in all_year_categories" v-bind:value="year_category">
+                            {{ year_category }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select v-model="boxer.weight_category" class="form-control mt-1">
+                        <option v-for="weight_category in get_possible_weight_categories(boxer.year_category)" v-bind:value="weight_category">
+                            {{ weight_category }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input v-model="boxer.n_fights" type="number" step="1" min="0" max="999" class="form-control mt-1">
+                </div>
+                <div class="col-md-4">
+                    <input v-model="boxer.name" class="form-control mt-1">    
+                </div>
+                <div class="col-md-2">
+                    <button type="button" @click="remove_boxer($event, index)" class="btn btn-danger mt-1 font-weight-bold">Odstrániť</button>
+                    <button type="button" @click="add_boxer($event, index)" class="btn btn-primary mt-1 font-weight-bold">+</button>
+                </div>
+            </div>
         </div>
     </form>
-    <button @click="send_to_server">Send</button>
+    <button @click="send_to_server" type="submit" class="btn btn-primary mt-3 font-weight-bold mx-auto">Odoslať</button>
 </div>
 
 <script src="vues.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
