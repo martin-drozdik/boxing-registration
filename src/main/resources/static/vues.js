@@ -112,3 +112,22 @@ new Vue({
         }
     }
 });
+
+
+new Vue({
+
+    el: '#all',
+
+    data: 
+    {
+        members: []
+    },
+
+    created: function () 
+    {
+        $.get("members", ( members ) => 
+        {
+            this.members = members
+        });
+    }
+});

@@ -90,8 +90,27 @@
 
 
 
-<div class="page page-all hidden">
-
+<div class="page page-all hidden" id="all">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+            <th scope="col">Meno a Priezvisko</th>
+            <th scope="col">Ročník</th>
+            <th scope="col">Kategória</th>
+            <th scope="col">Počet zápasov</th>
+            <th scope="col">Klub</th>
+            </tr>
+        </thead>
+        <tbody v-for="member in members">
+            <tr>
+            <th scope="row">{{ member.name }}</th>
+            <td>{{ member.year_category }}</td>
+            <td>{{ member.weight_category }}</td>
+            <td>{{ member.n_fights }}</td>
+            <td>{{ member.club }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <script src="vues.js"></script>

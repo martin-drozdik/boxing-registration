@@ -2,9 +2,10 @@
     box-sizing: content-box;
 }
 
-#boxerlist {
+.page {
     margin: auto;
-    max-width: 960px;
+    max-width: 1200px;
+    margin-top: 1rem;
 }
 
 .hidden {
