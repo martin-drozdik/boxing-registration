@@ -91,3 +91,24 @@ new Vue({
         }
     }
 });
+
+
+new Vue({
+
+    el: '#navbar',
+
+    methods: 
+    {
+        switch_to_registration: function()
+        {
+            $('.page').addClass('hidden');
+            $(".page-registration").removeClass('hidden');
+        },
+
+        switch_to_all: function()
+        {
+            $('.page').addClass('hidden');
+            $(".page-all").removeClass('hidden');
+        }
+    }
+});
