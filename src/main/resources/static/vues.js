@@ -163,7 +163,7 @@ function get_header()
 
 function make_excel_file(members)
 {
-    let separator = '\t';
+    let separator = ', ';
     let header = get_header();
     let order = ["club", "name", "year_category", "weight_category", "n_fights"];
     let header_line = join_to_line(header, order, separator);
