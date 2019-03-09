@@ -181,7 +181,7 @@ function join_to_line(object, order, separator)
     let strings = [];
     for (property of order)
     {
-        strings.push(object[property]);
+        strings.push(`"${object[property]}"`);
     }
     return strings.join(separator)
 }
