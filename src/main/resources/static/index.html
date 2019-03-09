@@ -15,7 +15,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_registration">Registrácia</button>
+                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_coach_registration">Registrácia</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_registration">Prihlasovanie na turnaj</button>
             </li>
             <li class="nav-item">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_all">Všetci boxeri</button>
@@ -24,17 +27,8 @@
     </nav>
 </div>
 
-<div class="page page-registration">
+<div class="page page-registration hidden">
 <div id="boxerlist" class="form-group">
-    <form>
-        <select id="allclubs" v-model="club" class="custom-select mt-2 mb-4">
-            <option value="" disabled selected>Vyberte Boxerský Klub</option>
-            <option v-for="club in all_clubs" v-bind:value="club">
-                {{ club }}
-            </option>   
-        </select>
-    </form>
-
     <form>
         <div>
             <div class="form-row">
@@ -113,6 +107,36 @@
         </tbody>
     </table>
 </div>
+
+
+<div class="page page-registration-coach" id="coach-registration">
+    <form>
+        <div class="form-group">
+        <label for="allclubs">Boxerský Klub</label>
+            <select id="allclubs" v-model="club" class="custom-select">
+                <option value="" disabled selected>Vyberte Boxerský Klub</option>
+                <option v-for="club in all_clubs" v-bind:value="club">
+                    {{ club }}
+                </option>   
+            </select>
+        </div>
+        <div class="form-group">
+                <label for="name-input">Meno a priezvisko</label>
+                <input type="email" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Meno a priezvisko">
+            </div>
+        <div class="form-group">
+            <label for="email-input">Emailová adresa</label>
+            <input type="email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="email-help" class="form-text text-muted">Na Vašu adresu Vám príde potvrdenie o registrácii.</small>
+        </div>
+        <div class="form-group">
+            <label for="password-input">Heslo</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Heslo">
+        </div>
+        <button type="submit" class="btn btn-primary">Odoslať</button>
+    </form>
+</div>
+
 
 <script src="vues.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

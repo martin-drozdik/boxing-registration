@@ -5,6 +5,23 @@ function make_empty_boxer(club)
 
 new Vue({
 
+    el: '#coach-registration',
+
+    data: {
+        all_clubs: []
+    },
+
+    created: function () 
+    {
+        $.get("clubs", ( clubs ) =>
+        {
+            this.all_clubs = clubs;
+        });
+    }
+});
+
+new Vue({
+
     el: '#boxerlist',
 
     data: 
@@ -12,8 +29,7 @@ new Vue({
         members: [make_empty_boxer(this.club)],
         club: "",
         year_to_categories: {},
-        all_year_categories: [],
-        all_clubs: []
+        all_year_categories: []
     },
 
     created: function () 
@@ -26,31 +42,8 @@ new Vue({
             }
             this.all_year_categories = Object.keys(this.year_to_categories);
         });
-
-        $.get("clubs", ( clubs ) =>
-        {
-            this.all_clubs = clubs;
-        });
     },
 
-    watch: 
-    {
-        club: function(newClub) 
-        {
-            let url = `/club/${newClub}`;
-            $.get(url, (data) => { 
-                if (data.length == 0)
-                {
-                    this.members = [make_empty_boxer(newClub)];
-                }
-                else
-                {
-                    this.members = data;
-                }
-            });
-        }
-    },
-   
     methods: 
     {
         send_to_server: function() 
@@ -109,6 +102,12 @@ new Vue({
         {
             $('.page').addClass('hidden');
             $(".page-all").removeClass('hidden');
+        },
+
+        switch_to_coach_registration: function()
+        {
+            $('.page').addClass('hidden');
+            $(".page-registration-coach").removeClass('hidden');
         }
     }
 });

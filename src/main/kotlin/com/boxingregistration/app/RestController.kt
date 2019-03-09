@@ -39,6 +39,13 @@ class MemberController(val repository: MemberRepository)
     }
 
 
+    @PostMapping("/register")
+    fun register(@RequestBody registerCommand: RegisterCommand): List<Member>
+    {
+        return repository.findByClub(club)
+    }
+
+
     @Transactional
     @PostMapping("/members/update")
     fun update(@RequestBody updateCommand: UpdateClubCommand)
