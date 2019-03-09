@@ -8,6 +8,7 @@ new Vue({
     el: '#coach-registration',
 
     data: {
+        coach: { name: "", email: "", password: "", club: "" },
         all_clubs: []
     },
 
@@ -17,6 +18,18 @@ new Vue({
         {
             this.all_clubs = clubs;
         });
+    },
+
+    methods: 
+    {
+        send_to_server: function()
+        {
+            $.post({ 
+                url: "/register",
+                data : JSON.stringify(this.coach),
+                contentType : 'application/json'
+            })
+        }
     }
 });
 

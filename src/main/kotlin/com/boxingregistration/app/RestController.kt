@@ -1,17 +1,25 @@
 package com.boxingregistration.app
 
-import com.boxingregistration.app.domain.Member
-import com.boxingregistration.app.domain.YearCategory
-import com.boxingregistration.app.domain.getAllClubs
-import com.boxingregistration.app.domain.getAllYearCategories
+import com.boxingregistration.app.domain.*
+import com.boxingregistration.app.persistence.CoachRepository
 import com.boxingregistration.app.persistence.MemberRepository
 import org.springframework.web.bind.annotation.*
 import javax.transaction.Transactional
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
+
 
 class UpdateClubCommand(val club: String, val members: List<Member>)
 
+class RegisterCommand(val name: String, val email: String, val password: String, val club: String)
+
 @RestController
-class MemberController(val repository: MemberRepository)
+class MemberController
+(
+    val memberRepository: MemberRepository,
+    val coachRepository: CoachRepository,
+    val emailSender: JavaMailSender
+)
 {
     @GetMapping("/categories")
     fun categories(): List<YearCategory>
@@ -28,21 +36,29 @@ class MemberController(val repository: MemberRepository)
     @GetMapping("/members")
     fun all(): List<Member>
     {
-        return repository.findAll()
+        return memberRepository.findAll()
     }
 
 
     @GetMapping("/club/{club}")
     fun club(@PathVariable club: String): List<Member>
     {
-        return repository.findByClub(club)
+        return memberRepository.findByClub(club)
     }
 
 
     @PostMapping("/register")
-    fun register(@RequestBody registerCommand: RegisterCommand): List<Member>
+    fun register(@RequestBody registerCommand: RegisterCommand): Coach
     {
-        return repository.findByClub(club)
+        val coach = Coach(registerCommand.name, registerCommand.email, registerCommand.password, registerCommand.club)
+
+        val message = SimpleMailMessage()
+        message.setTo(registerCommand.email)
+        message.setSubject("Vitaj v AIBA")
+        message.setText("Vitaj v AIBA")
+        emailSender.send(message)
+
+        return coachRepository.save(coach)
     }
 
 
@@ -50,7 +66,7 @@ class MemberController(val repository: MemberRepository)
     @PostMapping("/members/update")
     fun update(@RequestBody updateCommand: UpdateClubCommand)
     {
-        repository.deleteByClub(updateCommand.club)
-        repository.saveAll(updateCommand.members)
+        memberRepository.deleteByClub(updateCommand.club)
+        memberRepository.saveAll(updateCommand.members)
     }
 }
