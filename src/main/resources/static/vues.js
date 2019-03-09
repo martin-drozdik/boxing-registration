@@ -129,5 +129,59 @@ new Vue({
         {
             this.members = members
         });
+    },
+
+    methods: 
+    {
+        download: function() 
+        {
+            var text = make_excel_file(this.members);
+            var filename = "zaregistrovani-boxeri.csv";
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }        
     }
 });
+
+
+function get_header()
+{
+    return {
+        year_category: 'Ročník', 
+        weight_category: 'Kategória',
+        n_fights: 'Počet zápasov',
+        name: 'Meno a priezvisko',
+        club: 'Klub'
+    }
+}        
+
+
+function make_excel_file(members)
+{
+    let separator = '\t';
+    let header = get_header();
+    let order = ["club", "name", "year_category", "weight_category", "n_fights"];
+    let header_line = join_to_line(header, order, separator);
+    let lines = [header_line]
+    for (member of members)
+    {
+        lines.push(join_to_line(member, order, separator));
+    }
+    return lines.join("\n");
+}
+
+
+function join_to_line(object, order, separator)
+{
+    let strings = [];
+    for (property of order)
+    {
+        strings.push(object[property]);
+    }
+    return strings.join(separator)
+}

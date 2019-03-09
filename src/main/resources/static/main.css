@@ -11,3 +11,7 @@
 .hidden {
     display: none;
 }
+
+table {
+    margin-top: 14pt;
+}
