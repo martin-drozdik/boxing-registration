@@ -3,10 +3,10 @@ package com.boxingregistration.app
 import com.boxingregistration.app.domain.*
 import com.boxingregistration.app.persistence.CoachRepository
 import com.boxingregistration.app.persistence.MemberRepository
-import org.springframework.web.bind.annotation.*
-import javax.transaction.Transactional
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
 
 class UpdateClubCommand(val club: String, val members: List<Member>)
@@ -14,6 +14,7 @@ class UpdateClubCommand(val club: String, val members: List<Member>)
 class RegisterCommand(val name: String, val email: String, val password: String, val club: String)
 
 @RestController
+@RequestMapping("/api")
 class MemberController
 (
     val memberRepository: MemberRepository,

@@ -1,2 +1,7 @@
 http-server Projects/boxing-registration/src/main/resources/static -p 8081 -P http://localhost:8080
 
+docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+
+psql -h localhost -p 5432 -U postgres
+
+JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/boxing;JDBC_DATABASE_USERNAME=postgres;JDBC_DATABASE_PASSWORD=mysecretpassword

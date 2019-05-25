@@ -14,7 +14,7 @@ new Vue({
 
     created: function () 
     {
-        $.get("clubs", ( clubs ) =>
+        $.get("/api/clubs", ( clubs ) =>
         {
             this.all_clubs = clubs;
         });
@@ -25,7 +25,7 @@ new Vue({
         send_to_server: function()
         {
             $.post({ 
-                url: "/register",
+                url: "/api/register",
                 data : JSON.stringify(this.coach),
                 contentType : 'application/json'
             })
@@ -47,7 +47,7 @@ new Vue({
 
     created: function () 
     {
-        $.get("categories", ( categories ) => 
+        $.get("/api/categories", ( categories ) => 
         {
             for (let category of categories)
             {
@@ -62,7 +62,7 @@ new Vue({
         send_to_server: function() 
         {
             $.post({ 
-                url: "/members/update",
+                url: "/api/members/update",
                 data : JSON.stringify({ club: this.club, members: this.members }),
                 contentType : 'application/json'
             })
@@ -137,7 +137,7 @@ new Vue({
 
     created: function () 
     {
-        $.get("members", ( members ) => 
+        $.get("/api/members", ( members ) => 
         {
             this.members = members
         });
