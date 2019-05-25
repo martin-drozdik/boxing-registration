@@ -121,6 +121,12 @@ new Vue({
         {
             $('.page').addClass('hidden');
             $(".page-registration-coach").removeClass('hidden');
+        },
+
+        switch_to_login: function()
+        {
+            $('.page').addClass('hidden');
+            $(".page-login").removeClass('hidden');
         }
     }
 });

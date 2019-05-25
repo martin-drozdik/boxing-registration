@@ -18,6 +18,9 @@
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_coach_registration">Registrácia</button>
             </li>
             <li class="nav-item">
+                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_login">Prihlásenie</button>
+            </li>
+            <li class="nav-item">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_registration">Prihlasovanie na turnaj</button>
             </li>
             <li class="nav-item">
@@ -138,6 +141,21 @@
     </form>
 </div>
 
+
+<div class="page page-login hidden" id="login">
+    <form>
+        <div class="form-group">
+            <label for="email-input">Emailová adresa</label>
+            <input type="email" v-model="coach.email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="password-input">Heslo</label>
+            <input type="password" v-model="coach.password" class="form-control" id="password-input" placeholder="Heslo">
+        </div>
+
+    <button @click="send_to_server" type="submit" class="btn btn-primary">Odoslať</button>
+    </form>
+</div>
 
 
 <script src="vues.js"></script>
