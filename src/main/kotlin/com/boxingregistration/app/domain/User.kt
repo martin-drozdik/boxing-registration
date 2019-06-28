@@ -4,7 +4,7 @@ import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class Coach
+data class User
 (
     val name: String,
     @Id val email: String,

@@ -1,10 +1,11 @@
 package com.boxingregistration.app
 
 import com.boxingregistration.app.domain.*
-import com.boxingregistration.app.persistence.CoachRepository
 import com.boxingregistration.app.persistence.MemberRepository
+import com.boxingregistration.app.persistence.UserRepository
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import javax.transaction.Transactional
 
@@ -18,10 +19,16 @@ class RegisterCommand(val name: String, val email: String, val password: String,
 class MemberController
 (
     val memberRepository: MemberRepository,
-    val coachRepository: CoachRepository,
+    val coachRepository: UserRepository,
     val emailSender: JavaMailSender
 )
 {
+    @GetMapping("/login")
+    fun login(@AuthenticationPrincipal user: User): User
+    {
+        return user
+    }
+
     @GetMapping("/categories")
     fun categories(): List<YearCategory>
     {
@@ -49,9 +56,11 @@ class MemberController
 
 
     @PostMapping("/register")
-    fun register(@RequestBody registerCommand: RegisterCommand): Coach
+    fun register(@RequestBody registerCommand: RegisterCommand): User
     {
-        val coach = Coach(registerCommand.name, registerCommand.email, registerCommand.password, registerCommand.club)
+        val coach = User(registerCommand.name, registerCommand.email, registerCommand.password, registerCommand.club)
+
+        val successfullySavedUser = coachRepository.save(coach)
 
         val message = SimpleMailMessage()
         message.setTo(registerCommand.email)
@@ -59,7 +68,7 @@ class MemberController
         message.setText("Vitaj v AIBA")
         emailSender.send(message)
 
-        return coachRepository.save(coach)
+        return successfullySavedUser
     }
 
 

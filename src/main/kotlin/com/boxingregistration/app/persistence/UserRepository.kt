@@ -1,8 +1,8 @@
 package com.boxingregistration.app.persistence
 
-import com.boxingregistration.app.domain.Coach
+import com.boxingregistration.app.domain.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CoachRepository: JpaRepository<Coach, String>
+interface UserRepository: JpaRepository<User, String>
