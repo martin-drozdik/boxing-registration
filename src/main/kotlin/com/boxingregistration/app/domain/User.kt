@@ -1,13 +1,30 @@
 package com.boxingregistration.app.domain
 
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
 data class User
 (
-    val name: String,
+    val fullName: String,
     @Id val email: String,
     val password_hash: String,
     val club: String
-)
+
+): UserDetails
+{
+    override fun getUsername() = email
+    override fun getPassword() = password_hash
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf()
+
+    override fun isAccountNonExpired(): Boolean = true
+
+    override fun isAccountNonLocked() = true
+
+    override fun isCredentialsNonExpired() = true
+
+    override fun isEnabled() = true
+}

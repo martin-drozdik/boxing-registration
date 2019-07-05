@@ -15,9 +15,12 @@ class SecurityConfig : WebSecurityConfigurerAdapter()
             .antMatchers("/").permitAll()
             .antMatchers("/api/clubs").permitAll()
             .antMatchers("/api/categories").permitAll()
+            .antMatchers("/api/register").permitAll()
             .anyRequest().authenticated()
             .and()
             .logout()
             .permitAll()
+
+        http.csrf().disable()
     }
 }

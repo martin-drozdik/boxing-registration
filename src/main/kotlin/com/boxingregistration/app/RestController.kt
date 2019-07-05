@@ -18,9 +18,9 @@ class RegisterCommand(val name: String, val email: String, val password: String,
 @RequestMapping("/api")
 class MemberController
 (
-    val memberRepository: MemberRepository,
-    val coachRepository: UserRepository,
-    val emailSender: JavaMailSender
+        val memberRepository: MemberRepository,
+        val userRepository: UserRepository,
+        val emailSender: JavaMailSender
 )
 {
     @GetMapping("/login")
@@ -60,7 +60,7 @@ class MemberController
     {
         val coach = User(registerCommand.name, registerCommand.email, registerCommand.password, registerCommand.club)
 
-        val successfullySavedUser = coachRepository.save(coach)
+        val successfullySavedUser = userRepository.save(coach)
 
         val message = SimpleMailMessage()
         message.setTo(registerCommand.email)
