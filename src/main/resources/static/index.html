@@ -20,14 +20,18 @@
             <li class="nav-item">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_login">Prihlásenie</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item hidden" id="registration-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_registration">Prihlasovanie na turnaj</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item hidden" id="all-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_all">Všetci boxeri</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-block btn-dark font-weight-bold">{{ logindetails.username }}</button>
             </li>
         </ul>
     </nav>
+    
 </div>
 
 <div class="page page-registration hidden">
@@ -81,7 +85,7 @@
             </div>
         </div>
     </form>
-    <button @click="send_to_server" type="submit" class="btn btn-primary mt-3 font-weight-bold mx-auto">Odoslať</button>
+    <button @click="send_to_server" type="button" class="btn btn-primary mt-3 font-weight-bold mx-auto">Odoslať</button>
 </div>
 </div>
 
@@ -116,7 +120,7 @@
     <form>
         <div class="form-group">
         <label for="allclubs">Boxerský Klub</label>
-            <select id="allclubs" v-model="club" class="custom-select">
+            <select id="allclubs" v-model="coach.club" class="custom-select">
                 <option value="" disabled selected>Vyberte Boxerský Klub</option>
                 <option v-for="club in all_clubs" v-bind:value="club">
                     {{ club }}
@@ -146,14 +150,14 @@
     <form>
         <div class="form-group">
             <label for="email-input">Emailová adresa</label>
-            <input type="email" v-model="coach.email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="email" v-model="logindetails.username" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
         </div>
         <div class="form-group">
             <label for="password-input">Heslo</label>
-            <input type="password" v-model="coach.password" class="form-control" id="password-input" placeholder="Heslo">
+            <input type="password" v-model="logindetails.password" class="form-control" id="password-input" placeholder="Heslo">
         </div>
 
-    <button @click="send_to_server" type="submit" class="btn btn-primary">Odoslať</button>
+    <button @click="send_to_server" type="button" class="btn btn-primary">Odoslať</button>
     </form>
 </div>
 

@@ -3,6 +3,13 @@ function make_empty_boxer(club)
     return { year_category: '', weight_category: '', n_fights: '', name: '', club: club };
 }
 
+let logindetails = { username: "", password: "", club: "" };
+
+let beforeSend = function (xhr) 
+{
+    xhr.setRequestHeader ("Authorization", "Basic " + btoa(logindetails.username + ":" + logindetails.password));
+}
+
 new Vue({
 
     el: '#coach-registration',
@@ -27,11 +34,66 @@ new Vue({
             $.post({ 
                 url: "/api/register",
                 data : JSON.stringify(this.coach),
-                contentType : 'application/json'
+                contentType : 'application/json',
+                success: function()
+                {
+                    $('.page').addClass('hidden');
+                    $(".page-login").removeClass('hidden');
+                }
             })
         }
     }
 });
+
+
+var loginVue = new Vue({
+
+    el: '#login',
+
+    data:
+    {
+        logindetails: { username: "", password: "", club: "" }
+    },
+
+    methods: 
+    {
+        send_to_server: function()
+        {
+            let self = this;
+            $.get({ 
+                url: "/api/login",
+                contentType : 'application/json',
+                beforeSend: beforeSend,
+                success: function(data)
+                {                   
+                    logindetails.club = self.logindetails.club;
+                    logindetails.username = self.logindetails.username;
+                    logindetails.password = self.logindetails.password;
+
+                    $('.page').addClass('hidden');
+                    $(".page-registration").removeClass('hidden');
+
+                    $("#registration-nav").removeClass('hidden');
+                    $("#all-nav").removeClass('hidden');
+                    
+
+                    $.get(
+                        {
+                            url: "/api/members", 
+                            beforeSend: beforeSend,
+                            success: ( members ) => 
+                            {
+                                allVue.members = members;
+                            }
+                        });
+
+                    console.log(`Club changed to ${logindetails.club}`)
+                }
+            })
+        }
+    }
+});
+
 
 new Vue({
 
@@ -39,8 +101,7 @@ new Vue({
 
     data: 
     {
-        members: [make_empty_boxer(this.club)],
-        club: "",
+        members: [make_empty_boxer(logindetails.club)],
         year_to_categories: {},
         all_year_categories: []
     },
@@ -61,16 +122,25 @@ new Vue({
     {
         send_to_server: function() 
         {
+            this.members.forEach(element => {
+                element.club = logindetails.club;
+            });
+            let self = this;
             $.post({ 
                 url: "/api/members/update",
-                data : JSON.stringify({ club: this.club, members: this.members }),
-                contentType : 'application/json'
+                data : JSON.stringify({ members: this.members }),
+                contentType : 'application/json',
+                beforeSend: beforeSend,
+                success: function(data)
+                {
+                    self.members = [make_empty_boxer(logindetails.club)];
+                }
             })
         },
 
         add_boxer: function(event, index) 
         {
-            this.members.push(make_empty_boxer(this.club));
+            this.members.push(make_empty_boxer(logindetails.club));
         },
 
         remove_boxer: function(event, index) 
@@ -78,7 +148,7 @@ new Vue({
             this.members.splice(index, 1);
             if (this.members.length == 0)
             {
-                this.members = [make_empty_boxer(this.club)];
+                this.members = [make_empty_boxer(logindetails.club)];
             }
         },
 
@@ -102,6 +172,11 @@ new Vue({
 new Vue({
 
     el: '#navbar',
+
+    data: 
+    {
+        logindetails    
+    },
 
     methods: 
     {
@@ -132,7 +207,7 @@ new Vue({
 });
 
 
-new Vue({
+var allVue = new Vue({
 
     el: '#all',
 
@@ -143,9 +218,14 @@ new Vue({
 
     created: function () 
     {
-        $.get("/api/members", ( members ) => 
+        $.get(
         {
-            this.members = members
+            url: "/api/members", 
+            beforeSend: beforeSend,
+            success: ( members ) => 
+            {
+                this.members = members
+            }
         });
     },
 
