@@ -5,10 +5,14 @@ function make_empty_boxer(club)
 
 let logindetails = { username: "", password: "", club: "" };
 
-let beforeSend = function (xhr) 
+function makeBeforeSend(logindetails)
 {
-    xhr.setRequestHeader ("Authorization", "Basic " + btoa(logindetails.username + ":" + logindetails.password));
+    return function (xhr) 
+    {
+        xhr.setRequestHeader ("Authorization", "Basic " + btoa(logindetails.username + ":" + logindetails.password));
+    }
 }
+
 
 new Vue({
 
@@ -63,7 +67,7 @@ var loginVue = new Vue({
             $.get({ 
                 url: "/api/login",
                 contentType : 'application/json',
-                beforeSend: beforeSend,
+                beforeSend: makeBeforeSend(self.logindetails),
                 success: function(data)
                 {                   
                     logindetails.club = self.logindetails.club;
@@ -130,7 +134,7 @@ new Vue({
                 url: "/api/members/update",
                 data : JSON.stringify({ members: this.members }),
                 contentType : 'application/json',
-                beforeSend: beforeSend,
+                beforeSend: makeBeforeSend(logindetails),
                 success: function(data)
                 {
                     self.members = [make_empty_boxer(logindetails.club)];
@@ -221,7 +225,7 @@ var allVue = new Vue({
         $.get(
         {
             url: "/api/members", 
-            beforeSend: beforeSend,
+            beforeSend: makeBeforeSend(logindetails),
             success: ( members ) => 
             {
                 this.members = members

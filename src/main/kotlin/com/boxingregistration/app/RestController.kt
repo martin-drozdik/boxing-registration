@@ -63,7 +63,6 @@ class MemberController
         val coach = RegisteredUser(registerCommand.name, registerCommand.email, encoder.encode(registerCommand.password), registerCommand.club)
 
         val successfullySavedUser = userRepository.save(coach)
-
         val message = SimpleMailMessage()
         message.setTo(registerCommand.email)
         message.setSubject("Vitaj v AIBA")
