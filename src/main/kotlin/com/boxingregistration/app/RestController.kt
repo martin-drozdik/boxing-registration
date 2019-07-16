@@ -3,12 +3,17 @@ package com.boxingregistration.app
 import com.boxingregistration.app.domain.*
 import com.boxingregistration.app.persistence.MemberRepository
 import com.boxingregistration.app.persistence.UserRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import javax.transaction.Transactional
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
+
+
 
 
 class UpdateClubCommand(val members: List<Member>)
@@ -58,8 +63,18 @@ class MemberController
 
 
     @PostMapping("/register")
-    fun register(@RequestBody registerCommand: RegisterCommand): RegisteredUser
+    fun register(@RequestBody registerCommand: RegisterCommand): ResponseEntity<RegisteredUser>
     {
+        if (userRepository.findByEmail(registerCommand.email) != null)
+        {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The email address ${registerCommand.email} is already in use.")
+        }
+
+        if (userRepository.findByClub(registerCommand.club).isNotEmpty())
+        {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There is already somebody registered as the manager of club '${registerCommand.club}'.")
+        }
+
         val coach = RegisteredUser(registerCommand.name, registerCommand.email, encoder.encode(registerCommand.password), registerCommand.club)
 
         val successfullySavedUser = userRepository.save(coach)
@@ -67,9 +82,16 @@ class MemberController
         message.setTo(registerCommand.email)
         message.setSubject("Vitaj v AIBA")
         message.setText("Vitaj v AIBA")
-        emailSender.send(message)
+        try
+        {
+            emailSender.send(message)
+        }
+        catch (error: Throwable)
+        {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There is a problem with our mail server. Please contact the administrator of this webpage.")
+        }
 
-        return successfullySavedUser
+        return ResponseEntity.ok(successfullySavedUser)
     }
 
 

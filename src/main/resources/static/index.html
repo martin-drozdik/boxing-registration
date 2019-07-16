@@ -117,6 +117,9 @@
 
 
 <div class="page page-registration-coach" id="coach-registration">
+    <div v-for="error in errors" class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
     <form>
         <div class="form-group">
         <label for="allclubs">Boxerský Klub</label>

@@ -20,7 +20,8 @@ new Vue({
 
     data: {
         coach: { name: "", email: "", password: "", club: "" },
-        all_clubs: []
+        all_clubs: [],
+        errors: []
     },
 
     created: function () 
@@ -35,6 +36,7 @@ new Vue({
     {
         send_to_server: function()
         {
+            let self = this;
             $.post({ 
                 url: "/api/register",
                 data : JSON.stringify(this.coach),
@@ -43,6 +45,10 @@ new Vue({
                 {
                     $('.page').addClass('hidden');
                     $(".page-login").removeClass('hidden');
+                },
+                error: function(data) 
+                {
+                    self.errors = [data.responseJSON.message];
                 }
             })
         }
@@ -218,19 +224,6 @@ var allVue = new Vue({
     data: 
     {
         members: []
-    },
-
-    created: function () 
-    {
-        $.get(
-        {
-            url: "/api/members", 
-            beforeSend: makeBeforeSend(logindetails),
-            success: ( members ) => 
-            {
-                this.members = members
-            }
-        });
     },
 
     methods: 

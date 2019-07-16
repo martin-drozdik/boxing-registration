@@ -3,6 +3,7 @@ package com.boxingregistration.app.security
 import com.boxingregistration.app.persistence.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 
@@ -11,6 +12,7 @@ class UserDetailsRepository(val userRepository: UserRepository): UserDetailsServ
 {
     override fun loadUserByUsername(username: String?): UserDetails
     {
-        return userRepository.findByEmail(username!!)
+        val user = userRepository.findByEmail(username!!) ?: throw UsernameNotFoundException("The user $username was not found.")
+        return user
     }
 }
