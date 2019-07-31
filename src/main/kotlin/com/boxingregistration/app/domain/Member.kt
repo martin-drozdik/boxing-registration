@@ -8,11 +8,11 @@ import javax.persistence.Id
 data class Member
 (
     val name: String,
-    val club: String,
+    var club: String,
     val weight_category: String,
     val year_category: String,
     val n_fights: Int,
-    val tournament_name: String,
-    val coach: String = "",
+    var tournament_name: String,
+    var coach: String = "",
     @Id val id: String = UUID.randomUUID().toString()
 )

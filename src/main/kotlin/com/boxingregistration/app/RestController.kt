@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException
 import javax.transaction.Transactional
 
 
-class UpdateClubCommand(val members: List<Member>)
+class UpdateClubCommand(val members: MutableList<Member>)
 
 class RegisterCommand(val name: String, val email: String, val password: String, val club: String)
 
@@ -89,6 +89,7 @@ class MemberController
 
     ): String
     {
+        require(newTournamentCommand.name.isNotEmpty())
         val currentTournaments = tournamentRepository.findByIsCurrent(true)
         require(currentTournaments.size <= 1)
         if (currentTournaments.size == 1)
@@ -124,7 +125,7 @@ class MemberController
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There is already somebody registered as the manager of club '${registerCommand.club}'.")
         }
 
-        val coach = RegisteredUser(registerCommand.name, registerCommand.email, encoder.encode(registerCommand.password), registerCommand.club)
+        val coach = RegisteredUser(registerCommand.name, registerCommand.email, encoder.encode(registerCommand.password), registerCommand.club, false)
 
         val successfullySavedUser = userRepository.save(coach)
         val message = SimpleMailMessage()
@@ -146,8 +147,15 @@ class MemberController
 
     @Transactional
     @PostMapping("/members/update")
-    fun update(@RequestBody updateCommand: UpdateClubCommand)
+    fun update(@RequestBody updateCommand: UpdateClubCommand, @AuthenticationPrincipal user: RegisteredUser)
     {
+        val tournament = tournament()
+        require(tournament.isNotEmpty())
+        updateCommand.members.forEach {
+            it.coach = user.email
+            it.tournament_name = tournament
+            it.club = user.club
+        }
         memberRepository.saveAll(updateCommand.members)
     }
 }

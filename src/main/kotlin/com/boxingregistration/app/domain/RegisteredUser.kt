@@ -12,7 +12,8 @@ data class RegisteredUser
     val fullName: String,
     @Id val email: String,
     val password_hash: String,
-    val club: String
+    val club: String,
+    val isAdmin: Boolean
 
 ): UserDetails
 {

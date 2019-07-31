@@ -92,14 +92,24 @@ var loginVue = new Vue({
                     
 
                     $.get(
+                    {
+                        url: "/api/members", 
+                        beforeSend,
+                        success: ( members ) => 
                         {
-                            url: "/api/members", 
-                            beforeSend,
-                            success: ( members ) => 
-                            {
-                                allVue.members = members;
-                            }
-                        });
+                            allVue.members = members;
+                        }
+                    });
+
+                    $.get(
+                    {
+                        url: "/api/tournament", 
+                        beforeSend,
+                        success: ( data ) => 
+                        {
+                            current_tournament.name = data;
+                        }
+                    });
 
                     console.log(`Club changed to ${logindetails.club}`)
                 }
@@ -184,6 +194,52 @@ new Vue({
 });
 
 
+var allVue = new Vue({
+
+    el: '#all',
+
+    data: 
+    {
+        members: [],
+        current_tournament
+    },
+
+    methods: 
+    {
+        refresh: function()
+        {
+            let self = this;
+            $.get({ 
+                url: "/api/members",
+                beforeSend: makeBeforeSend(logindetails),
+                success: function(data)
+                {
+                    self.members = data
+                }});
+        },
+
+        download: function() 
+        {
+            var text = make_excel_file(this.members);
+            var filename = "zaregistrovani-boxeri.csv";
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }        
+    },
+
+    created ()
+    {
+        this.refresh();
+    }
+});
+
+
+
 new Vue({
 
     el: '#navbar',
@@ -205,6 +261,7 @@ new Vue({
         {
             $('.page').addClass('hidden');
             $(".page-all").removeClass('hidden');
+            allVue.refresh();
         },
 
         switch_to_coach_registration: function()
@@ -228,32 +285,6 @@ new Vue({
 });
 
 
-var allVue = new Vue({
-
-    el: '#all',
-
-    data: 
-    {
-        members: [],
-        current_tournament
-    },
-
-    methods: 
-    {
-        download: function() 
-        {
-            var text = make_excel_file(this.members);
-            var filename = "zaregistrovani-boxeri.csv";
-            var element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }        
-    }
-});
 
 
 
