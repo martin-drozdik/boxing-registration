@@ -6,10 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.DefaultSecurityFilterChain
-import org.springframework.security.web.server.SecurityWebFilterChain
 
 
 @Configuration
@@ -28,7 +25,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter()
 
         http.authorizeRequests()
             .antMatchers("/").permitAll()
-            .antMatchers("/*.css", "/*.js").permitAll()
+            .antMatchers("/*.css", "/*.js", "/*.ico").permitAll()
             .antMatchers("/api/clubs").permitAll()
             .antMatchers("/api/categories").permitAll()
             .antMatchers("/api/register").permitAll()

@@ -1,9 +1,12 @@
-function make_empty_boxer(club) 
-{
-    return { year_category: '', weight_category: '', n_fights: '', name: '', club: club };
-}
+let current_tournament = { name: "Nie je vyhlásený žiaden turnaj" }
 
 let logindetails = { username: "", password: "", club: "" };
+
+function make_empty_boxer(club) 
+{
+    return { year_category: '', weight_category: '', n_fights: '', name: '', club: club, tournament_name: current_tournament.name };
+}
+
 
 function makeBeforeSend(logindetails)
 {
@@ -70,10 +73,11 @@ var loginVue = new Vue({
         send_to_server: function()
         {
             let self = this;
+            let beforeSend = makeBeforeSend(self.logindetails);
             $.get({ 
                 url: "/api/login",
                 contentType : 'application/json',
-                beforeSend: makeBeforeSend(self.logindetails),
+                beforeSend,
                 success: function(data)
                 {                   
                     logindetails.club = self.logindetails.club;
@@ -90,7 +94,7 @@ var loginVue = new Vue({
                     $.get(
                         {
                             url: "/api/members", 
-                            beforeSend: beforeSend,
+                            beforeSend,
                             success: ( members ) => 
                             {
                                 allVue.members = members;
@@ -112,6 +116,7 @@ new Vue({
     data: 
     {
         members: [make_empty_boxer(logindetails.club)],
+        current_tournament,
         year_to_categories: {},
         all_year_categories: []
     },
@@ -212,6 +217,12 @@ new Vue({
         {
             $('.page').addClass('hidden');
             $(".page-login").removeClass('hidden');
+        },
+
+        switch_to_tournament: function()
+        {
+            $('.page').addClass('hidden');
+            $(".page-tournament").removeClass('hidden');
         }
     }
 });
@@ -223,7 +234,8 @@ var allVue = new Vue({
 
     data: 
     {
-        members: []
+        members: [],
+        current_tournament
     },
 
     methods: 
@@ -240,6 +252,38 @@ var allVue = new Vue({
             element.click();
             document.body.removeChild(element);
         }        
+    }
+});
+
+
+
+var tournamentVue = new Vue({
+
+    el: '#tournament',
+
+    data: 
+    {
+        current_tournament,
+        new_tournament: ""
+    },
+
+    methods: 
+    {
+        send_to_server: function() 
+        {
+            let self = this;
+            $.post({ 
+                url: "/api/newtournament",
+                data : JSON.stringify({ name: this.new_tournament }),
+                contentType : 'application/json',
+                beforeSend: makeBeforeSend(logindetails),
+                success: function(data)
+                {
+                    current_tournament.name = self.new_tournament;
+                    new_tournament = "";
+                }
+            })
+        }     
     }
 });
 

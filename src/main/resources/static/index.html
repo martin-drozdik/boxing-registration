@@ -29,6 +29,9 @@
             <li class="nav-item">
                 <button class="btn btn-block btn-dark font-weight-bold">{{ logindetails.username }}</button>
             </li>
+            <li class="nav-item">
+                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_tournament">Turnaj</button>
+            </li>
         </ul>
     </nav>
     
@@ -37,6 +40,9 @@
 <div class="page page-registration hidden">
 <div id="boxerlist" class="form-group">
     <form>
+        <h3>
+            Aktívny turnaj: {{ current_tournament.name }}
+        </h3>
         <div>
             <div class="form-row">
                 <div class="col-md-2">
@@ -133,7 +139,7 @@
         <div class="form-group">
                 <label for="name-input">Meno a priezvisko</label>
                 <input v-model="coach.name" class="form-control" id="name-input" aria-describedby="emailHelp" placeholder="Meno a priezvisko">
-            </div>
+        </div>
         <div class="form-group">
             <label for="email-input">Emailová adresa</label>
             <input type="email" v-model="coach.email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
@@ -161,6 +167,19 @@
         </div>
 
     <button @click="send_to_server" type="button" class="btn btn-primary">Odoslať</button>
+    </form>
+</div>
+
+
+<div class="page page-tournament hidden" id="tournament">
+    <form>
+        <h3>
+            Aktívny turnaj: {{ current_tournament.name }}
+        </h3>
+        <div class="form-group">
+        <input v-model="new_tournament" class="form-control">    
+        </div>
+        <button @click="send_to_server" type="button" class="btn btn-primary">Odoslať</button>
     </form>
 </div>
 

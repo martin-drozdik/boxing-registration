@@ -12,6 +12,7 @@ data class Member
     val weight_category: String,
     val year_category: String,
     val n_fights: Int,
+    val tournament_name: String,
     val coach: String = "",
     @Id val id: String = UUID.randomUUID().toString()
 )

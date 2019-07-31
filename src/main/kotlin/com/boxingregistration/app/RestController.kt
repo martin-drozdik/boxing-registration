@@ -2,23 +2,24 @@ package com.boxingregistration.app
 
 import com.boxingregistration.app.domain.*
 import com.boxingregistration.app.persistence.MemberRepository
+import com.boxingregistration.app.persistence.TournamentRepository
 import com.boxingregistration.app.persistence.UserRepository
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
-import javax.transaction.Transactional
-import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
-
-
+import javax.transaction.Transactional
 
 
 class UpdateClubCommand(val members: List<Member>)
 
 class RegisterCommand(val name: String, val email: String, val password: String, val club: String)
+
+class NewTournamentCommand(val name: String)
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +27,7 @@ class MemberController
 (
     val memberRepository: MemberRepository,
     val userRepository: UserRepository,
+    val tournamentRepository: TournamentRepository,
     val emailSender: JavaMailSender,
     private val encoder: PasswordEncoder
 )
@@ -36,11 +38,13 @@ class MemberController
         return user
     }
 
+
     @GetMapping("/categories")
     fun categories(): List<YearCategory>
     {
         return getAllYearCategories()
     }
+
 
     @GetMapping("/clubs")
     fun clubs(): List<String>
@@ -48,10 +52,55 @@ class MemberController
         return getAllClubs()
     }
 
+
+    @GetMapping("/tournament")
+    fun tournament(): String
+    {
+        val tournament = tournamentRepository.findByIsCurrent(true)
+        if (tournament.isEmpty())
+        {
+            return ""
+        }
+        require(tournament.size == 1)
+        return tournament.first().name
+    }
+
+
     @GetMapping("/members")
+    fun members(@AuthenticationPrincipal user: RegisteredUser): List<Member>
+    {
+        return memberRepository.findByClub(user.club).filter { it.tournament_name == tournament()}
+    }
+
+
+    @GetMapping("/all")
     fun all(@AuthenticationPrincipal user: RegisteredUser): List<Member>
     {
-        return memberRepository.findByClub(user.club)
+        return memberRepository.findAll()
+    }
+
+
+    @Transactional
+    @PostMapping("/newtournament")
+    fun newtournament
+    (
+        @AuthenticationPrincipal user: RegisteredUser,
+        @RequestBody newTournamentCommand: NewTournamentCommand
+
+    ): String
+    {
+        val currentTournaments = tournamentRepository.findByIsCurrent(true)
+        require(currentTournaments.size <= 1)
+        if (currentTournaments.size == 1)
+        {
+            val currentTournament = currentTournaments.first()
+            currentTournament.isCurrent = false
+            tournamentRepository.save(currentTournament)
+        }
+        val tournament = Tournament(newTournamentCommand.name, true)
+        tournamentRepository.save(tournament)
+
+        return tournament.name
     }
 
 
