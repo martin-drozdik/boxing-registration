@@ -69,6 +69,11 @@ class MemberController
     @GetMapping("/members")
     fun members(@AuthenticationPrincipal user: RegisteredUser): List<Member>
     {
+        val tournament = tournament()
+        if (tournament.isEmpty())
+        {
+            return emptyList()
+        }
         return memberRepository.findByClub(user.club).filter { it.tournament_name == tournament()}
     }
 
@@ -76,7 +81,13 @@ class MemberController
     @GetMapping("/all")
     fun all(@AuthenticationPrincipal user: RegisteredUser): List<Member>
     {
-        return memberRepository.findAll()
+        require(user.isAdmin)
+        val tournament = tournament()
+        if (tournament.isEmpty())
+        {
+            return emptyList()
+        }
+        return memberRepository.findAll().filter { it.tournament_name == tournament()}
     }
 
 
