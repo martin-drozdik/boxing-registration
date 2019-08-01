@@ -78,16 +78,27 @@ var loginVue = new Vue({
                 url: "/api/login",
                 contentType : 'application/json',
                 beforeSend,
-                success: function(data)
+                success: function(registered_user)
                 {                   
                     logindetails.club = self.logindetails.club;
                     logindetails.username = self.logindetails.username;
                     logindetails.password = self.logindetails.password;
 
                     $('.page').addClass('hidden');
-                    $(".page-registration").removeClass('hidden');
 
-                    $("#registration-nav").removeClass('hidden');
+                    if (registered_user.admin)
+                    {
+                        $("#tournament-nav").removeClass('hidden');
+                        $(".page-tournament").removeClass('hidden');
+                    }
+                    else
+                    {
+                        $("#registration-nav").removeClass('hidden');
+                        $(".page-registration").removeClass('hidden');
+                    }
+                    
+                    $("#login-nav").addClass('hidden');
+                    $("#user-registration-nav").addClass('hidden');
                     $("#all-nav").removeClass('hidden');
                     
 

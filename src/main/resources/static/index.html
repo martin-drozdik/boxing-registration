@@ -14,10 +14,10 @@
 <div id="navbar">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul class="navbar-nav">
-            <li class="nav-item active">
+            <li class="nav-item active" id="user-registration-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_coach_registration">Registrácia</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="login-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_login">Prihlásenie</button>
             </li>
             <li class="nav-item hidden" id="registration-nav">
@@ -29,7 +29,7 @@
             <li class="nav-item">
                 <button class="btn btn-block btn-dark font-weight-bold">{{ logindetails.username }}</button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item hidden" id="tournament-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_tournament">Turnaj</button>
             </li>
         </ul>

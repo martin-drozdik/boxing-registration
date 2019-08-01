@@ -160,6 +160,8 @@ class MemberController
     @PostMapping("/members/update")
     fun update(@RequestBody updateCommand: UpdateClubCommand, @AuthenticationPrincipal user: RegisteredUser)
     {
+        require(!user.isAdmin)
+
         val tournament = tournament()
         require(tournament.isNotEmpty())
         updateCommand.members.forEach {
