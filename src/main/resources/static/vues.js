@@ -17,6 +17,55 @@ function makeBeforeSend(logindetails)
 }
 
 
+function login(vue, club, email, password, loggedin_user)
+{
+    vue.errors = [];
+    logindetails.club = club;
+    logindetails.username = email;
+    logindetails.password = password;
+
+    $('.page').addClass('hidden');
+
+    if (loggedin_user.admin)
+    {
+        $("#tournament-nav").removeClass('hidden');
+        $(".page-tournament").removeClass('hidden');
+    }
+    else
+    {
+        $("#registration-nav").removeClass('hidden');
+        $(".page-registration").removeClass('hidden');
+    }
+    
+    $("#login-nav").addClass('hidden');
+    $("#user-registration-nav").addClass('hidden');
+    $("#all-nav").removeClass('hidden');
+    
+
+    $.get(
+    {
+        url: "/api/members", 
+        beforeSend,
+        success: ( members ) => 
+        {
+            allVue.members = members;
+        }
+    });
+
+    $.get(
+    {
+        url: "/api/tournament", 
+        beforeSend,
+        success: ( data ) => 
+        {
+            current_tournament.name = data;
+        }
+    });
+
+    console.log(`Club changed to ${logindetails.club}`)
+}
+
+
 new Vue({
 
     el: '#coach-registration',
@@ -44,10 +93,11 @@ new Vue({
                 url: "/api/register",
                 data : JSON.stringify(this.coach),
                 contentType : 'application/json',
-                success: function()
+                success: function(registered_user)
                 {
                     $('.page').addClass('hidden');
                     $(".page-login").removeClass('hidden');
+                    login(self, self.coach.club, self.coach.email, self.coach.password, registered_user)
                 },
                 error: function(data) 
                 {
@@ -65,7 +115,8 @@ var loginVue = new Vue({
 
     data:
     {
-        logindetails: { username: "", password: "", club: "" }
+        logindetails: { username: "", password: "", club: "" },
+        errors: []
     },
 
     methods: 
@@ -80,49 +131,18 @@ var loginVue = new Vue({
                 beforeSend,
                 success: function(registered_user)
                 {                   
-                    logindetails.club = self.logindetails.club;
-                    logindetails.username = self.logindetails.username;
-                    logindetails.password = self.logindetails.password;
-
-                    $('.page').addClass('hidden');
-
-                    if (registered_user.admin)
+                    login(self, self.logindetails.club, self.logindetails.email, self.logindetails.password, registered_user)
+                },
+                error: function(data) 
+                {
+                    if (data.status == 401)
                     {
-                        $("#tournament-nav").removeClass('hidden');
-                        $(".page-tournament").removeClass('hidden');
+                        self.errors = ["Nesprávne heslo, alebo nesprávny e-mail."];
                     }
                     else
                     {
-                        $("#registration-nav").removeClass('hidden');
-                        $(".page-registration").removeClass('hidden');
+                        self.errors = ["Stala sa chyba. Neznamená to, že ste zadali nesprávne heslo alebo e-mail. Prosím kontaktujte administrátora stránky."];
                     }
-                    
-                    $("#login-nav").addClass('hidden');
-                    $("#user-registration-nav").addClass('hidden');
-                    $("#all-nav").removeClass('hidden');
-                    
-
-                    $.get(
-                    {
-                        url: "/api/members", 
-                        beforeSend,
-                        success: ( members ) => 
-                        {
-                            allVue.members = members;
-                        }
-                    });
-
-                    $.get(
-                    {
-                        url: "/api/tournament", 
-                        beforeSend,
-                        success: ( data ) => 
-                        {
-                            current_tournament.name = data;
-                        }
-                    });
-
-                    console.log(`Club changed to ${logindetails.club}`)
                 }
             })
         }

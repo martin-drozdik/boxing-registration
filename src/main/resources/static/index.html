@@ -156,6 +156,9 @@
 
 
 <div class="page page-login hidden" id="login">
+    <div v-for="error in errors" class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
     <form>
         <div class="form-group">
             <label for="login-email-input">Emailová adresa</label>
