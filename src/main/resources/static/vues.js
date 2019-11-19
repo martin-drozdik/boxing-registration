@@ -1,4 +1,5 @@
-let current_tournament = { name: "Nie je vyhlásený žiaden turnaj" }
+let current_tournament = { name: "" }
+
 
 let logindetails = { username: "", password: "", club: "" };
 
@@ -41,6 +42,7 @@ function login(vue, club, email, password, loggedin_user)
     $("#user-registration-nav").addClass('hidden');
     $("#all-nav").removeClass('hidden');
     
+    let beforeSend = makeBeforeSend(logindetails);
 
     $.get(
     {
@@ -131,7 +133,7 @@ var loginVue = new Vue({
                 beforeSend,
                 success: function(registered_user)
                 {                   
-                    login(self, self.logindetails.club, self.logindetails.email, self.logindetails.password, registered_user)
+                    login(self, self.logindetails.club, self.logindetails.username, self.logindetails.password, registered_user)
                 },
                 error: function(data) 
                 {
@@ -160,6 +162,14 @@ new Vue({
         current_tournament,
         year_to_categories: {},
         all_year_categories: []
+    },
+
+    computed: 
+    {
+        is_disabled: function () 
+        {
+            return this.current_tournament.name == "";
+        }
     },
 
     created: function () 
@@ -220,6 +230,19 @@ new Vue({
         get_possible_year_categories: function()
         {
             return Object.keys(window.year_to_categories);
+        },
+
+        get_no_tournament_message: function()
+        {
+            return "Nie je vyhlásený žiaden turnaj";
+        },
+
+        get_tournament_message: function()
+        {
+            if (current_tournament.name == "")
+                return this.get_no_tournament_message() 
+            else 
+                return this.current_tournament.name;
         }
     }
 });

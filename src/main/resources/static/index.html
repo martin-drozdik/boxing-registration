@@ -26,11 +26,11 @@
             <li class="nav-item hidden" id="all-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_all">Všetci boxeri</button>
             </li>
-            <li class="nav-item">
-                <button class="btn btn-block btn-dark font-weight-bold">{{ logindetails.username }}</button>
-            </li>
             <li class="nav-item hidden" id="tournament-nav">
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_tournament">Turnaj</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-block btn-dark font-weight-bold">{{ logindetails.username }}</button>
             </li>
         </ul>
     </nav>
@@ -39,9 +39,10 @@
 
 <div class="page page-registration hidden">
 <div id="boxerlist" class="form-group">
+    <fieldset :disabled="is_disabled">
     <form>
         <h3>
-            Aktívny turnaj: {{ current_tournament.name }}
+            Aktívny turnaj: {{ get_tournament_message() }}
         </h3>
         <div>
             <div class="form-row">
@@ -92,6 +93,7 @@
         </div>
     </form>
     <button @click="send_to_server" type="button" class="btn btn-primary mt-3 font-weight-bold mx-auto">Odoslať</button>
+    </fieldset>
 </div>
 </div>
 
