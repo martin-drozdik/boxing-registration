@@ -18,16 +18,16 @@
                 <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_coach_registration">Registrácia</button>
             </li>
             <li class="nav-item" id="login-nav">
-                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_login">Prihlásenie</button>
+                <button id="login-nav-button" class="btn btn-block btn-dark font-weight-bold" @click="switch_to_login">Prihlásenie</button>
             </li>
             <li class="nav-item hidden" id="registration-nav">
-                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_registration">Prihlasovanie na turnaj</button>
+                <button id="registration-nav-button" class="btn btn-block btn-dark font-weight-bold" @click="switch_to_registration">Prihlasovanie na turnaj</button>
             </li>
             <li class="nav-item hidden" id="all-nav">
-                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_all">Všetci boxeri</button>
+                <button id="all-nav-button" class="btn btn-block btn-dark font-weight-bold" @click="switch_to_all">Všetci boxeri</button>
             </li>
             <li class="nav-item hidden" id="tournament-nav">
-                <button class="btn btn-block btn-dark font-weight-bold" @click="switch_to_tournament">Turnaj</button>
+                <button id="tournament-nav-button" class="btn btn-block btn-dark font-weight-bold" @click="switch_to_tournament">Turnaj</button>
             </li>
             <li class="nav-item">
                 <button class="btn btn-block btn-dark font-weight-bold">{{ logindetails.username }}</button>
@@ -171,7 +171,7 @@
             <input type="password" v-model="logindetails.password" class="form-control" id="login-password-input" placeholder="Heslo">
         </div>
 
-    <button @click="send_to_server" type="button" class="btn btn-primary">Odoslať</button>
+    <button id="login-send-button" @click="send_to_server" type="button" class="btn btn-primary">Odoslať</button>
     </form>
 </div>
 
